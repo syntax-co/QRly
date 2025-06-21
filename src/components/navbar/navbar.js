@@ -1,4 +1,4 @@
-import { Menu } from "lucide-react";
+
 import { Button } from "../ui/button";
 import { useRouter } from "next/router";
 
@@ -18,12 +18,14 @@ const NavBar = () => {
             backgroundImage:'url(./images/logo.png)'
           }}
 
-          onClick={() => {router.push('/dashboard')}}
+          onClick={() => {router.push('/')}}
           />
         </div>
-        <nav className="hidden md:flex gap-6 items-center">
+        <nav className="gap-6 items-center">
           
-          <Button className=" text-white cursor-pointer">Get Started</Button>
+          <Button className=" text-white cursor-pointer"
+          onClick={() => {router.push('/dashboard')}}
+          >Get Started</Button>
         </nav>
       </header>
     )

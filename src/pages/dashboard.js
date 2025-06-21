@@ -1,77 +1,89 @@
-import { useState } from "react";
+import { useState, useRef} from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import QrCode from "@/components/qr-code/qr-code";
+
+
+
 
 export default function QRDashboard() {
-  const [url, setUrl] = useState("");
-  const [qrSrc, setQrSrc] = useState(null);
+  const [url, setUrl] = useState("http://example.com");
+  const qrRef = useRef(null);
+  const qrCode = useRef(null);
+  
+  const handleDownload = () => {
 
-  const generateQrCode = () => {
-    if (!url) return;
-    const apiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(
-      url
-    )}`;
-    setQrSrc(apiUrl);
-  };
+    qrCode.current.download({name:'qr-code',extension:'png'})
+  }
+
 
   return (
     <div className="h-[92vh]
     flex items-center justify-center
     ">
-      <div className="flex flex-col w-5/6 h-4/6">
+      <div className="flex flex-col h-4/6
+      
+      w-5/6
+      sm:w-5/6
+      md:w-1/2
+      lg:w-1/2
+      xl:w-1/2
+      
+      ">
 
-        <h1 className="text-3xl font-bold text-black mb-6">QR Code Generator</h1>
+        <div className='h-fit
+        bg-(--color-one) border border-black mb-2 p-2
+        '
+        >
+          <h1 className="text-3xl font-bold text-black">QR Code Generator</h1>
+        </div>
         
         <div className='flex-1 flex '
         >
 
-            {/* Left Panel */}
-            <div className="w-1/3 p-6 flex flex-col justify-between
-            bg-(--color-one) border border-black
-            ">
-            <div className='text-black'
+
+          {/* Right Panel */}
+          <div className="w-full p-12 flex flex-col items-center justify-center
+          bg-(--color-one) border border-black
+          ">
+
+            <div className='w-fit h-full flex flex-col'
             >
-                <label htmlFor="url" className="block text-black mb-2">
-                Enter a URL:
-                </label>
-                <Input className='border-black outline-none'
-                id="url"
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
-                placeholder="https://example.com"
-                
+              <div className='w-[200px] aspect-square'
+              >
+                <QrCode 
+                qrRef={qrRef}
+                qrCode={qrCode}
+                data={url}
                 />
-            </div>
-            <Button onClick={generateQrCode} className="mt-4 text-white">
-                Generate
-            </Button>
+              </div>
+
+              <div className='text-black my-3 mt-auto'
+              >
+                  <label htmlFor="url" className="block text-black mb-2">
+                  Enter a URL:
+                  </label>
+                  <Input className='border-black outline-none'
+                  id="url"
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                  placeholder="https://example.com"
+                  
+                  />
+              </div>
+
+              <div className='bg-black rounded-md p-2 
+              flex items-center justify-center cursor-pointer
+              '
+
+              onClick={() => {handleDownload()}}
+              >
+                Download
+              </div>
             </div>
 
-            {/* Right Panel */}
-            <div className="flex-1 ml-3 p-6 flex flex-col items-center justify-center
-            bg-(--color-one) border border-black
-            ">
-            {qrSrc ? (
-                <>
-                <img
-                    src={qrSrc}
-                    alt="Generated QR Code"
-                    width={200}
-                    height={200}
-                    className="border border-black"
-                />
-                <a
-                    href={qrSrc}
-                    download="qr-code.png"
-                    className="mt-4 text-sm text-[--color-four] underline"
-                >
-                    Download QR Code
-                </a>
-                </>
-            ) : (
-                <p className="text-black text-center">Your QR code preview will appear here after generation.</p>
-            )}
-            </div>
+
+          </div>
 
         </div>
 
